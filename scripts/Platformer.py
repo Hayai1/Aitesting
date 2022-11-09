@@ -39,37 +39,14 @@ dirt_img = pygame.image.load('assets/dirt.png')
 
 
 tile_rects = []
-y = 0
-preNode = None
-nodes = []
-connectionList = []
-'''
-for layer in mapConnections:
-        x = 0
-        for tile in layer:
-            if tile != '0':
-                newNode = Node(x*16,y*16)
-                nodes.append(newNode)
-                if preNode != None:
-                    newNode.add_connection(preNode)
-                preNode = nodes[-1]
-                if tile != '2':
-                    for node in connectionList:
-                        if node[0] == tile:
-                            newNode.add_connection(node[1],False)
-                    connectionList.append([tile,newNode]) 
-            else:
-                preNode = None
-            x += 1
-        y += 1
-'''
+
 def openJsonFile():
     with open('data/mapNodeLayout.json') as f:
         data = json.load(f)['nodes']
-        counter = 0
+        nodes = []
         nodeDictAndConnections = {}
         for node in data:
-            nodeData = data['node' + str(counter)]
+            nodeData = data[node]
             id = nodeData['id']
             x = nodeData['x']
             y = nodeData['y']
@@ -78,7 +55,7 @@ def openJsonFile():
             nodeDictAndConnections[node] = [newNode,[]]
             for connection in nodeData['connections']:
                 nodeDictAndConnections[node][1].append(connection)
-            counter += 1
+            
         for node in nodeDictAndConnections:
             for connection in nodeDictAndConnections[node][1]:
                 parentNode = nodeDictAndConnections[node][0]
@@ -121,7 +98,9 @@ while True: # game loop
         for connection in node.connections:
             coords.append([connection.x-scroll[0],connection.y-scroll[1]])
         if len(coords) >= 2:
+            coords = sorted(coords)
             pygame.draw.lines(display,(255,0,0),False,coords,1)
+        coords = []
 
     enemy1.draw(display,scroll)
     for event in pygame.event.get(): # event loop

@@ -13,7 +13,7 @@
         },
         "node1" : 
         {
-            "id" : 0,
+            "id" : 1,
             "x" : 8,
             "y" : 3,
             "connections" : 
@@ -24,7 +24,7 @@
         }, 
         "node2" : 
         {
-            "id" : 1,
+            "id" : 2,
             "x" : 9,
             "y" : 1,
             "connections" : 
