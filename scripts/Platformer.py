@@ -33,7 +33,6 @@ def load_map(path):
     return game_map
 
 game_map = load_map('data/map')
-mapConnections = load_map('data/mapConnections')
 grass_img = pygame.image.load('assets/grass.png')
 dirt_img = pygame.image.load('assets/dirt.png')
 
@@ -55,7 +54,6 @@ def openJsonFile():
             nodeDictAndConnections[node] = [newNode,[]]
             for connection in nodeData['connections']:
                 nodeDictAndConnections[node][1].append(connection)
-            
         for node in nodeDictAndConnections:
             for connection in nodeDictAndConnections[node][1]:
                 parentNode = nodeDictAndConnections[node][0]
@@ -94,6 +92,7 @@ while True: # game loop
         y += 1
 
     for node in nodes:
+        pygame.draw.rect(display,(0,255,0),pygame.Rect(node.x-scroll[0],node.y-scroll[1],3,3))
         coords = [[node.x-scroll[0],node.y-scroll[1]]]
         for connection in node.connections:
             coords.append([connection.x-scroll[0],connection.y-scroll[1]])
