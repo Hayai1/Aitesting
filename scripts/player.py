@@ -27,7 +27,7 @@ class Player:
         self.vertical_momentum += 0.2
         if self.vertical_momentum > 3:
             self.vertical_momentum = 3
-
+        
         self.rect.x += self.movement[0]
         hit_list = self.collision_test(self.rect,tiles)
         for tile in hit_list:
@@ -37,6 +37,7 @@ class Player:
             elif self.movement[0] < 0:
                 self.rect.left = tile.right
                 self.collision_types['left'] = True
+        
         self.rect.y += self.movement[1]
 
         hit_list = self.collision_test(self.rect,tiles)
@@ -47,13 +48,14 @@ class Player:
             elif self.movement[1] < 0:
                 self.rect.top = tile.bottom
                 self.collision_types['top'] = True
-                
+             
         if self.collision_types['bottom'] == True:
             self.air_timer = 0
             self.vertical_momentum = 0
         else:
             self.air_timer += 1
         self.collision_types = {'top':False,'bottom':False,'right':False,'left':False}
+    
         
     def draw(self,screen,scroll):
         screen.blit(self.player_img,(self.rect.x - scroll[0],self.rect.y - scroll[1]))
