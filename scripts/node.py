@@ -4,6 +4,7 @@ class Node:
         self.pos = [x,y]
         self.x = x
         self.y = y
+        self.color = (255,255,0)
         self.connections = []
     def add_connection(self,node):
         self.connections.append(node)

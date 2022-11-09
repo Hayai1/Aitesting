@@ -10,7 +10,12 @@ class Player:
         self.movement = [0,0]
         self.moving_right = False
         self.moving_left = False
-
+    @property
+    def x(self):
+        return self.rect.x
+    @property
+    def y(self):
+        return self.rect.y
     def collision_test(self,rect,tiles):
         hit_list = []
         for tile in tiles:
