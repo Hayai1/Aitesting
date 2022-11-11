@@ -7,7 +7,6 @@ class Enemy:
         self.x = x
         self.y = y
         self.time = 0
-        self.ai = Ai(graph)
     def draw(self, screen,scroll,currentNode):
         self.time += 1
         rndNum = random.randint(0,len(currentNode.connections)-1)
