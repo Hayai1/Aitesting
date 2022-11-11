@@ -18,21 +18,17 @@ graph = Graph('data/mapNodeLayout.json')
 player1 = Player()
 currentNode = graph.nodes[1]
 enemy1 = Enemy(100,100,graph)
-
 camera = Camera(player1)
 input = Input(player1)
 world = World('data/map')
-ai = Ai(graph)
 doAnotherPath = False
 while True: # game loop
     display.fill((146,244,255)) # clear screen by filling it with blue
-    if doAnotherPath:
-        ai.DrawARandomPath(player1)
+    enemy1.update(player1,doAnotherPath)
     camera.update()
     doAnotherPath = input.update()
     currentNode = enemy1.draw(display,camera.scroll,currentNode)
     player1.update(display,camera.scroll,world.tile_rects)
     world.draw(display,camera.scroll)
     graph.draw(display,camera.scroll)
-    #graph.getNodeCloseToPlayer(player1)
     screen.update(display)
