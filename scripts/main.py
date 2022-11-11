@@ -16,7 +16,6 @@ screen = Screen((600,400),"Platformer",60)
 display = pygame.Surface((300,200)) # used as the surface for rendering, which is scaled
 graph = Graph('data/mapNodeLayout.json')
 player1 = Player()
-currentNode = graph.nodes[1]
 enemy1 = Enemy(100,100,graph)
 camera = Camera(player1)
 input = Input(player1)
@@ -27,7 +26,7 @@ while True: # game loop
     enemy1.update(player1,doAnotherPath)
     camera.update()
     doAnotherPath = input.update()
-    currentNode = enemy1.draw(display,camera.scroll,currentNode)
+    enemy1.draw(display,camera.scroll)
     player1.update(display,camera.scroll,world.tile_rects)
     world.draw(display,camera.scroll)
     graph.draw(display,camera.scroll)
