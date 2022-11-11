@@ -44,11 +44,10 @@ class Ai:
                     continue
                 openList.put(successor)
             closedList.append(q)
-    def DrawARandomPath(self,currentLocation,player):
+    def DrawPath(self,currentLocation,player):
         for nodes in self.graph.nodes:
             nodes.color = (255,255,0)
         target = self.graph.getNodeCloseToPlayer(player)
-        
         path = self.findPath(currentLocation,target)
         target.color = (0,255,0)
         for node in path:

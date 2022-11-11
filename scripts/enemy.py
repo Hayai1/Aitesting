@@ -18,7 +18,7 @@ class Enemy:
         pygame.draw.rect(screen,(255,0,0),pygame.Rect(self.currentNode.x - scroll[0],self.currentNode.y - scroll[1]-16,16,16))
     def update(self,player,doAnotherPath):
         if doAnotherPath:
-            self.ai.DrawARandomPath(self.currentNode,player)
+            self.ai.DrawPath(self.currentNode,player)
 
     
     

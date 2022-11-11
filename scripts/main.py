@@ -7,7 +7,6 @@ from camera import Camera
 from input import Input
 from world import World
 from screen import Screen
-from ai import Ai
 from pygame.locals import *
 
 pygame.init() # initiates pygame
@@ -20,6 +19,7 @@ enemy1 = Enemy(100,100,graph)
 camera = Camera(player1)
 input = Input(player1)
 world = World('data/map')
+
 doAnotherPath = False
 while True: # game loop
     display.fill((146,244,255)) # clear screen by filling it with blue
