@@ -44,10 +44,12 @@ class Ai:
                     continue
                 openList.put(successor)
             closedList.append(q)
+    def DrawARandomPath(self,player):
+        for nodes in self.graph.nodes:
+            nodes.color = (255,255,0)
+        target = self.graph.getNodeCloseToPlayer(player)
+        path = self.findPath(self.graph.nodes[0],target)
+        target.color = (0,255,0)
+        for node in path:
+            node.color = (0,0,255)
 
-'''
-graph = Graph('data/mapNodeLayout.json')
-ai = Ai(graph)
-closedList = ai.findPath(graph.nodes[0],graph.nodes[10])
-closedList
-'''

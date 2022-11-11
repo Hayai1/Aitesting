@@ -23,26 +23,13 @@ camera = Camera(player1)
 input = Input(player1)
 world = World('data/map')
 ai = Ai(graph)
-n = 16
-path = ai.findPath(graph.nodes[0],graph.nodes[n])
-graph.nodes[n].color = (0,255,0)
-for node in path:
-    node.color = (0,0,255)
-time = 0
-
+doAnotherPath = False
 while True: # game loop
-    time += 1
-    if time % 120 == 0:
-        for nodes in graph.nodes:
-            nodes.color = (255,255,0)
-        n = random.randint(0,len(graph.nodes)-1)
-        path = ai.findPath(graph.nodes[0],graph.nodes[n])
-        graph.nodes[n].color = (0,255,0)
-        for node in path:
-            node.color = (0,0,255)
     display.fill((146,244,255)) # clear screen by filling it with blue
+    if doAnotherPath:
+        ai.DrawARandomPath(player1)
     camera.update()
-    input.update()
+    doAnotherPath = input.update()
     currentNode = enemy1.draw(display,camera.scroll,currentNode)
     player1.update(display,camera.scroll,world.tile_rects)
     world.draw(display,camera.scroll)
