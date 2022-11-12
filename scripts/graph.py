@@ -28,10 +28,8 @@ class Graph:
             coords = [[node.x-scroll[0],node.y-scroll[1]]]
             for connection in node.connections:
                 coords.append([connection.x-scroll[0],connection.y-scroll[1]])
-            if len(coords) >= 2:
-                coords = sorted(coords)
                 pygame.draw.lines(screen,(255,0,0),False,coords,1)
-            coords = []
+                coords = [[node.x-scroll[0],node.y-scroll[1]]]
 
     def getNodeCloseToPlayer(self,player):
         closestNode = None

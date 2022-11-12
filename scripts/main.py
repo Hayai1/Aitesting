@@ -29,5 +29,6 @@ while True: # game loop
     enemy1.draw(display,camera.scroll)
     player1.update(display,camera.scroll,world.tile_rects)
     world.draw(display,camera.scroll)
+    graph.nodes[9].color = (0,255,0)
     graph.draw(display,camera.scroll)
     screen.update(display)

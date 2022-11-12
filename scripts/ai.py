@@ -1,17 +1,14 @@
-import pygame
-import math
-import random
-from graph import Graph
 from queue import PriorityQueue
 class Ai:
     def __init__(self,graph) -> None:
         self.graph = graph
         self.distanceBetweenNodes = 0
+
     def findPath(self,start,goal):
         #init the open list
         openList = PriorityQueue()#queue
         #init the closed list
-        closedList = []#queue
+        closedList = []
         #put the starting node on the open list
         openList.put(start)
         skipSuccessor = False
@@ -24,7 +21,13 @@ class Ai:
             for successor in successors:
                 #if successor is the goal, stop the search
                 if successor.id == goal.id:
-                    return closedList
+                    closedList.append(q)
+                    path = []
+                    path.append(closedList[0])
+                    for i in range(1,len(closedList)):
+                        if closedList[i] in path[-1].connections:
+                            path.append(closedList[i])
+                    return path
                 else:
                     #else, compute both g and h for successor
                     successor.setCosts(g=0,end=goal,parent=q)
@@ -44,6 +47,7 @@ class Ai:
                     continue
                 openList.put(successor)
             closedList.append(q)
+
     def DrawPath(self,currentLocation,player):
         for nodes in self.graph.nodes:
             nodes.color = (255,255,0)
@@ -52,4 +56,4 @@ class Ai:
         target.color = (0,255,0)
         for node in path:
             node.color = (0,0,255)
-
+        return path

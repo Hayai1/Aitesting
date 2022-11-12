@@ -86,7 +86,7 @@
             "y" : 7,
             "connections" : 
             [
-                {"id" : "node6"},
+                {"id" : "node24"},
                 {"id" : "node8"}
             ]
         },
@@ -98,7 +98,6 @@
             "connections" : 
             [
                 {"id" : "node7"},
-                {"id" : "node0"},
                 {"id" : "node9"}
             ]
         },
@@ -109,6 +108,7 @@
             "y" : 7,
             "connections" : 
             [
+                {"id" : "node0"},
                 {"id" : "node8"},
                 {"id" : "node10"}
             ]
@@ -209,6 +209,7 @@
             "connections" : 
             [
                 {"id" : "node17"},
+                {"id" : "node5"},
                 {"id" : "node19"}
                 
             ]
@@ -242,8 +243,7 @@
             "y" : 7,
             "connections" : 
             [
-                {"id" : "node20"},
-                {"id" : "node21"}
+                {"id" : "node20"}
             ]
         },
         "node22" : 
