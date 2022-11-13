@@ -1,5 +1,4 @@
 import pygame
-import random
 from player import Player
 from graph import Graph
 from enemy import Enemy
