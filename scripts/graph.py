@@ -3,26 +3,9 @@ from node import Node
 from world import World
 import math
 class Graph:
-    def __init__(self,NodeLayoutPath):
-        self.path =NodeLayoutPath
-        self.nodes = self.getNodes()
-    def getNodes(self):
-        with open(self.path) as f:
-            data = json.load(f)['nodes']
-        nodes = []
-        nodeAndConnections = {}
-        for node in data:
-            nodeData = data[node]
-            newNode = Node(nodeData['id'],nodeData['x']*16,nodeData['y']*16)
-            nodes.append(newNode)
-            nodeAndConnections[node] = [newNode,[]]
-            for connection in nodeData['connections']:
-                nodeAndConnections[node][1].append(connection)
-        for node in nodeAndConnections:
-            for connection in nodeAndConnections[node][1]:
-                parentNode = nodeAndConnections[node][0]
-                parentNode.add_connection(nodeAndConnections[connection['id']][0])
-        return nodes
+    def __init__(self,mapdata):
+        self.path =0
+        self.nodes = self.getNodes(mapdata)
     def draw(self,screen,scroll):
         for node in self.nodes:
             pygame.draw.rect(screen,node.color,pygame.Rect(node.x-scroll[0],node.y-scroll[1],3,3))
@@ -44,7 +27,7 @@ class Graph:
                     closestNode = node
         closestNode.color = (0,255,0)
         return closestNode
-    def placeNodes(self,mapdata):
+    def getNodes(self,mapdata):
         nodes = []
         x = 0
         y = 0
@@ -55,7 +38,7 @@ class Graph:
                 if tile !='2':
                     nodeRow.append(None)
                 if tile == '2':
-                    nodeRow.append(Node(id,x,y))
+                    nodeRow.append(Node(id,x*16,y*16))
                     id +=1
                 x += 1
             x = 0
@@ -85,60 +68,12 @@ class Graph:
                                 node.add_connection(rowAbove[nodeIndex - 1])
                                 break
                     
-        return nodes
+        nodelist = []
+        for row in nodes:
+            for node in row:
+                if node is not None:
+                    nodelist.append(node)
+        return nodelist
                             
                                     
 
-
-
-        
-
-world = World('data/mapTest')
-graph = Graph('data/mapNodeLayout.json')
-nodes = graph.placeNodes(world.map)
-
-import pygame
- 
-# Define some colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
- 
-pygame.init()
- 
-# Set the width and height of the screen [width, height]
-size = (700, 500)
-screen = pygame.display.set_mode(size)
- 
-pygame.display.set_caption("My Game")
- 
-# Loop until the user clicks the close button.
-done = False
- 
-# Used to manage how fast the screen updates
-clock = pygame.time.Clock()
- 
-# -------- Main Program Loop -----------
-while not done:
-    # --- Main event loop
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
- 
-    
-    screen.fill(WHITE)
-    for row in nodes:
-        for node in row:
-            if node != None:
-                pygame.draw.rect(screen,RED,pygame.Rect(node.x*16,node.y*16,3,3))
-                for connection in node.connections:
-                    pygame.draw.lines(screen,BLACK,False,[[node.x*16,node.y*16],[connection.x*16,connection.y*16]],1)
-    
-    pygame.display.flip()
- 
-    # --- Limit to 60 frames per second
-    clock.tick(60)
- 
-# Close the window and quit.
-pygame.quit()
