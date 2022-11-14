@@ -20,7 +20,7 @@ class Node:
             self.g = g
         self.f = self.g + self.h
     def __eq__(self, other):
-        if other is None:
+        if other is None: 
             return False
         return self.id == other.id
 
@@ -31,6 +31,7 @@ class Node:
         return (self.f > other.f)
     def add_connection(self,node):
         self.connections.append(node)
+        node.connections.append(self)
 
 
 
