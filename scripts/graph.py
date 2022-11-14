@@ -67,7 +67,6 @@ class Graph:
                             if nodeIndex > 0 and rowAbove[nodeIndex - 1] is not None and rowAbove[nodeIndex] is None and nodes[rowIndex-aboveBy-1][nodeIndex - 1] is None and nodes[rowIndex-aboveBy-2][nodeIndex - 1] is None:
                                 node.add_connection(rowAbove[nodeIndex - 1])
                                 break
-                    
         nodelist = []
         for row in nodes:
             for node in row:

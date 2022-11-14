@@ -12,12 +12,12 @@ pygame.init() # initiates pygame
 
 screen = Screen((600,400),"Platformer",60)
 display = pygame.Surface((300,200)) # used as the surface for rendering, which is scaled
-graph = Graph('data/mapNodeLayout.json')
+world = World('data/map')
+graph = Graph(world.map)
 player1 = Player()
 enemy1 = Enemy(100,100,graph)
 camera = Camera(player1)
 input = Input(player1)
-world = World('data/map')
 
 doAnotherPath = False
 while True: # game loop
@@ -30,3 +30,10 @@ while True: # game loop
     world.draw(display,camera.scroll)
     graph.draw(display,camera.scroll)
     screen.update(display)
+
+#TODO:
+'''
+test the node generation and connections in differnt map styles 
+
+then when happy with node generation make the enemy walk to each node and posibly fall/jump to next node if needed
+'''
