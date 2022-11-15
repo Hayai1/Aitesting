@@ -38,7 +38,7 @@ class Graph:
                 if tile !='2':
                     nodeRow.append(None)
                 if tile == '2':
-                    nodeRow.append(Node(id,x*16,y*16))
+                    nodeRow.append(Node(id,x*16+8,y*16))
                     id +=1
                 x += 1
             x = 0
