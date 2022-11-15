@@ -1,6 +1,6 @@
 import math
 class Node:
-    def __init__(self,id,x,y,parent=0):
+    def __init__(self,id,x,y):
         self.id = id
         self.pos = [x,y]
         self.x = x
@@ -9,9 +9,10 @@ class Node:
         self.connections = []
         self.g = 0
         self.h = 0
-        self.parent = parent
-        self.f = self.g + self.h
-    def setCosts(self,g=None,end=None,parent=0):
+        self.f = 0
+        self.parent = None
+        
+    def setCosts(self,g=None,end=None,parent=None):
         if parent is not None:
             self.parent = parent
         if end is not None:

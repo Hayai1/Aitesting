@@ -18,7 +18,9 @@ player1 = Player()
 enemy1 = Enemy(100,100,graph)
 camera = Camera(player1)
 input = Input(player1)
+
 doAnotherPath = False
+
 while True: # game loop
     display.fill((146,244,255)) # clear screen by filling it with blue
     enemy1.update(player1,doAnotherPath)

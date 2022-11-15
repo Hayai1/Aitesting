@@ -11,7 +11,6 @@ class Enemy:
         self.path = None
     def draw(self, screen,scroll):
         self.time += 1
-        
         if self.path != None:
             if self.time % 15 == 0:
                 self.currentNode = self.path[self.counter]
@@ -24,6 +23,8 @@ class Enemy:
         if doAnotherPath:
             self.path = self.ai.DrawPath(self.currentNode,player)
             self.counter = 0
-
+        #self.move()
+    def move(self,node,connection):
+        pass
     
     
