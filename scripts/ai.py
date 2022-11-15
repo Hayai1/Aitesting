@@ -18,8 +18,10 @@ class Ai:
             q = openList.get()
             #generate q's successors and set their parents to q
             successors = []
+            gScores = []
             for connection in q.connections:
                 successors.append(connection['node'])
+                gScores.append(connection['g'])
             for successor in successors:
                 #if successor is the goal, stop the search
                 if successor.id == goal.id:
@@ -35,7 +37,7 @@ class Ai:
                     return path
                 else:
                     #else, compute both g and h for successor
-                    successor.setCosts(g=0,end=goal,parent=q)
+                    successor.setCosts(g=gScores[successors.index(successor)],end=goal,parent=q)
                 for node in openList.queue:
                     if node.id == successor.id and node.f <= successor.f:
                         skipSuccessor = True
