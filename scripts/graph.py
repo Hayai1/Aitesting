@@ -1,11 +1,10 @@
-import pygame,json
+import pygame
 from node import Node
-from world import World
 import math
 class Graph:
     def __init__(self,mapdata):
-        self.path =0
         self.nodes = self.getNodes(mapdata)
+    #draw the graph (nodes and there connections)
     def draw(self,screen,scroll):
         for node in self.nodes:
             pygame.draw.rect(screen,node.color,pygame.Rect(node.x-scroll[0],node.y-scroll[1],3,3))
@@ -14,7 +13,7 @@ class Graph:
                 coords.append([connection.x-scroll[0],connection.y-scroll[1]])
                 pygame.draw.lines(screen,(255,0,0),False,coords,1)
                 coords = [[node.x-scroll[0],node.y-scroll[1]]]
-
+    #returns the node closest to the player
     def getNodeCloseToPlayer(self,player):
         closestNode = None
         for node in self.nodes:
@@ -27,6 +26,7 @@ class Graph:
                     closestNode = node
         closestNode.color = (0,255,0)
         return closestNode
+    #returns a list of nodes created relative to the map passed in
     def getNodes(self,mapdata):
         nodes = []
         x = 0
