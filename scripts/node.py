@@ -30,9 +30,9 @@ class Node:
     
     def _gt__(self, other):
         return (self.f > other.f)
-    def add_connection(self,node):
-        self.connections.append(node)
-        node.connections.append(self)
+    def add_connection(self,node,g):
+        self.connections.append({'node' : node,'g' : g})
+        node.connections.append({'node' : self,'g' : g})
 
 
 

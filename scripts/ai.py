@@ -17,7 +17,9 @@ class Ai:
             #find the node with the least f on the open list, call it "q" and pop q off the open list
             q = openList.get()
             #generate q's successors and set their parents to q
-            successors = q.connections
+            successors = []
+            for connection in q.connections:
+                successors.append(connection['node'])
             for successor in successors:
                 #if successor is the goal, stop the search
                 if successor.id == goal.id:
@@ -25,7 +27,10 @@ class Ai:
                     path = []
                     path.append(closedList[0])
                     for i in range(1,len(closedList)):
-                        if closedList[i] in path[-1].connections:
+                        connections = []
+                        for connection in path[-1].connections:
+                            connections.append(connection['node'])
+                        if closedList[i] in connections:
                             path.append(closedList[i])
                     return path
                 else:
