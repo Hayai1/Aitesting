@@ -31,17 +31,16 @@ class Enemy:
                 self.counter += 1
             if self.counter < len(self.path):
                 self.nextNode = self.path[self.counter]
-                if self.currentNode.getG(self.nextNode) == 0:
-                    if self.nextNode.x > self.currentNode.x:
-                        self.movingLeft = False
-                        self.movingRight = True
-                    elif self.nextNode.x < self.currentNode.x:
-                        self.movingRight = False
-                        self.movingLeft = True
-                else:
+                if self.currentNode.getG(self.nextNode) is not 0:
                     self.jump()
-                    self.x = self.nextNode.x
-                    self.y = self.nextNode.y
+                if self.nextNode.x > self.currentNode.x:
+                    self.movingLeft = False
+                    self.movingRight = True
+                elif self.nextNode.x < self.currentNode.x:
+                    self.movingRight = False
+                    self.movingLeft = True
+                    
+                    
         
         self.move(tiles)
         screen.blit(self.img, (self.rect.x - scroll[0],self.rect.y - scroll[1]))
