@@ -10,12 +10,12 @@ from pygame.locals import *
 
 pygame.init() # initiates pygame
 
-screen = Screen((600,400),"Platformer",60)
+screen = Screen((600,400),"PlaceHolder",60)
 display = pygame.Surface((300,200)) # used as the surface for rendering, which is scaled
 world = World('data/map')
 graph = Graph(world.map)
 player1 = Player()
-enemy1 = Enemy(100,100,graph)
+enemy1 = Enemy(graph.nodes[16].x,graph.nodes[16].y,graph)
 camera = Camera(player1)
 input = Input(player1)
 
@@ -26,7 +26,7 @@ while True: # game loop
     enemy1.update(player1,doAnotherPath)
     camera.update()
     doAnotherPath = input.update()
-    enemy1.draw(display,camera.scroll)
+    enemy1.draw(display,camera.scroll,world.tile_rects)
     player1.update(display,camera.scroll,world.tile_rects)
     world.draw(display,camera.scroll)
     graph.draw(display,camera.scroll)

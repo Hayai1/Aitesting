@@ -33,6 +33,11 @@ class Node:
     def add_connection(self,node,g):
         self.connections.append({'node' : node,'g' : g})
         node.connections.append({'node' : self,'g' : g})
+    def getG(self,node):
+        for connection in self.connections:
+            if connection['node'] == node:
+                return connection['g']
+        
 
 
 
