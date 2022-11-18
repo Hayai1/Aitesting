@@ -8,12 +8,12 @@ class Enemy:
         self.currentNode = graph.nodes[10]
         self.x = graph.nodes[10].x
         self.y = graph.nodes[10].y
-        self.rect = pygame.Rect(self.x-5,self.y-13,5,13)
+        self.rect = pygame.Rect(self.x,self.y-13,5,13)
         self.time = 0
         self.air_timer = 0
         self.vertical_momentum = 0
         self.ai = Ai(graph)
-        self.counter = 0
+        self.counter = 1
         self.path = None
         self.frame = 0
         self.moving = False
@@ -24,45 +24,33 @@ class Enemy:
         self.movingLeft = False
         self.movingRight = False
         if self.path is not None:
+            self.frame += 1
+            if self.frame == 16:
+                self.frame = 0
+                self.currentNode = self.nextNode
+                self.counter += 1
             if self.counter < len(self.path):
                 self.nextNode = self.path[self.counter]
                 if self.currentNode.getG(self.nextNode) == 0:
-                    if self.nextNode < self.currentNode:
-                        self.movingLeft = True
-                        self.movingRight = False
-                    elif self.nextNode > self.currentNode:
-                        self.movingRight = True
+                    if self.nextNode.x > self.currentNode.x:
                         self.movingLeft = False
+                        self.movingRight = True
+                    elif self.nextNode.x < self.currentNode.x:
+                        self.movingRight = False
+                        self.movingLeft = True
                 else:
+                    self.jump()
                     self.x = self.nextNode.x
                     self.y = self.nextNode.y
         
         self.move(tiles)
-        screen.blit(self.img, (self.x - scroll[0]-5,self.y - scroll[1]-13))
-        '''
-        if self.path != None:
-            if self.currentNode.getG(self.path[self.counter]) == 0:
-                #atNextNode=self.move(self.currentNode, self.path[self.counter])
-                atNextNode=self.moveTooNextNode(self.currentNode, self.path[self.counter],tiles)
-            else:
-                atNextNode = True
-                #self.jump()
-                self.x = self.path[self.counter].x
-                self.y = self.path[self.counter].y
-            if atNextNode:
-                self.currentNode = self.path[self.counter]
-                self.counter +=1     
-            if len(self.path) == self.counter:
-                self.counter = 0
-                self.path = None
-        #pygame.draw.rect(screen,(0,255,0),pygame.Rect(self.x - scroll[0]-8,self.y - scroll[1]-16,16,16))
         screen.blit(self.img, (self.rect.x - scroll[0],self.rect.y - scroll[1]))
-        #screen.blit(self.img, (self.x - scroll[0]-5,self.y - scroll[1]-13))
-   '''
+        
     def update(self,player,doAnotherPath):
         if doAnotherPath:
             self.path = self.ai.DrawPath(self.currentNode,player)
-            self.counter = 0
+            self.counter = 1
+            self.frame = 0
             self.nextNode = None
     
             
@@ -90,7 +78,6 @@ class Enemy:
         if self.air_timer < 6:
             self.vertical_momentum = -5
     def move(self,tiles):
-        self.jump()
         collision_types = {'top':False,'bottom':False,'right':False,'left':False}
         movement = [0,0]
         if self.movingRight:#moving right
