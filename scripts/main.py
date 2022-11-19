@@ -1,6 +1,5 @@
 import pygame
 from player import Player
-from graph import Graph
 from enemy import Enemy
 from camera import Camera
 from input import Input
@@ -27,10 +26,3 @@ while True: # game loop
     player1.update(display,camera.scroll,world.tile_rects)
     world.draw(display,camera.scroll)
     screen.update(display)
-
-#TODO:
-'''
-test the node generation and connections in differnt map styles 
-
-then when happy with node generation make the enemy walk to each node and posibly fall/jump to next node if needed
-'''
