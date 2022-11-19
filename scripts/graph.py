@@ -14,7 +14,7 @@ class Graph:
                 pygame.draw.lines(screen,(255,0,0),False,coords,1)
                 coords = [[node.x-scroll[0],node.y-scroll[1]]]
     #returns the node closest to the player
-    def getNodeCloseToPlayer(self,player):
+    def getNodeCloseTo(self,player):
         closestNode = None
         for node in self.nodes:
             if closestNode == None:

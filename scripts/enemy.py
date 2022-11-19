@@ -3,6 +3,7 @@ from ai import Ai
 import random
 class Enemy:
     def __init__(self,x,y,graph):
+        self.graph = graph
         self.img = pygame.image.load('assets/enemy.png').convert()
         self.img.set_colorkey((255,255,255))
         self.currentNode = graph.nodes[10]
@@ -31,7 +32,7 @@ class Enemy:
                 self.counter += 1
             if self.counter < len(self.path):
                 self.nextNode = self.path[self.counter]
-                if self.currentNode.getG(self.nextNode) is not 0:
+                if self.currentNode.getG(self.nextNode) is not 0 and self.nextNode.y < self.currentNode.y:
                     self.jump()
                 if self.nextNode.x > self.currentNode.x:
                     self.movingLeft = False
@@ -39,33 +40,26 @@ class Enemy:
                 elif self.nextNode.x < self.currentNode.x:
                     self.movingRight = False
                     self.movingLeft = True
-                    
-                    
-        
+            else:
+                self.x = self.rect.x
+                self.y = self.rect.y
+                node = self.graph.getNodeCloseTo(self)
+                if node.x > self.rect.x:
+                    self.movingLeft = False
+                    self.movingRight = True
+                elif node.x < self.rect.x:
+                    self.movingRight = False
+                    self.movingLeft = True
+
         self.move(tiles)
         screen.blit(self.img, (self.rect.x - scroll[0],self.rect.y - scroll[1]))
         
     def update(self,player,doAnotherPath):
         if doAnotherPath:
-            self.path = self.ai.DrawPath(self.currentNode,player)
+            self.path = self.ai.DrawPath(self.graph.getNodeCloseTo(self),player)
             self.counter = 1
             self.frame = 0
             self.nextNode = None
-    
-            
-    def move2(self,node,connection):
-        if connection is None or node is None:
-            return False
-        if node.x < connection.x:
-            self.x += 1
-        if node.x > connection.x:
-            self.x -= 1
-        self.frame += 1
-        if self.frame == 16:
-            self.frame = 0
-            self.currentNode = self.nextNode
-            return True
-        return False
     
     def collision_test(self,rect,tiles):
         hit_list = []

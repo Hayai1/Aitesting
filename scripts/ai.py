@@ -58,7 +58,7 @@ class Ai:
     def DrawPath(self,currentLocation,player):
         for nodes in self.graph.nodes:
             nodes.color = (255,255,0)
-        target = self.graph.getNodeCloseToPlayer(player)
+        target = self.graph.getNodeCloseTo(player)
         path = self.findPath(currentLocation,target)
         target.color = (0,255,0)
         for node in path:
