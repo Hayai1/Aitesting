@@ -13,23 +13,19 @@ pygame.init() # initiates pygame
 screen = Screen((600,400),"PlaceHolder",60)
 display = pygame.Surface((300,200)) # used as the surface for rendering, which is scaled
 world = World('data/map')
-graph = Graph(world.map)
 player1 = Player()
-enemy1 = Enemy(graph.nodes[16].x,graph.nodes[16].y,graph)
+enemy1 = Enemy(world.worldGraph)
 camera = Camera(player1)
 input = Input(player1)
 
-doAnotherPath = False
-
 while True: # game loop
     display.fill((146,244,255)) # clear screen by filling it with blue
-    enemy1.update(player1,doAnotherPath)
+    enemy1.update(player1)
     camera.update()
-    doAnotherPath = input.update()
+    input.update()
     enemy1.draw(display,camera.scroll,world.tile_rects)
     player1.update(display,camera.scroll,world.tile_rects)
     world.draw(display,camera.scroll)
-    graph.draw(display,camera.scroll)
     screen.update(display)
 
 #TODO:

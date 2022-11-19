@@ -1,10 +1,12 @@
 import pygame
+from graph import Graph
 class World:
     def __init__(self,worldPath):
         self.map = self.load_map(worldPath)
         self.grass_img = pygame.image.load('assets/grass.png')
         self.dirt_img = pygame.image.load('assets/dirt.png')
         self.tile_rects = []
+        self.worldGraph = Graph(self.map) # Create a graph
         
     def load_map(self,path):
         f = open(path + '.txt','r')
@@ -30,3 +32,4 @@ class World:
                     screen.blit(self.dirt_img,(x*16-scroll[0],y*16-scroll[1]))
                 x += 1
             y += 1
+        self.worldGraph.draw(screen,scroll)

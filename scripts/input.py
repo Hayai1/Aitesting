@@ -16,12 +16,10 @@ class Input:
                     self.player.moving_left = True
                 if event.key == K_UP:
                     if self.player.air_timer < 6:
-                        self.player.vertical_momentum = -5
-                if event.key == K_s:
-                    DoAnotherPath = True
+                        self.player.vertical_momentum = -5                
             if event.type == KEYUP:
                 if event.key == K_RIGHT:
                     self.player.moving_right = False
                 if event.key == K_LEFT:
                     self.player.moving_left = False
-        return DoAnotherPath
+    

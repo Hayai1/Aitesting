@@ -2,7 +2,7 @@ import pygame
 from ai import Ai
 import random
 class Enemy:
-    def __init__(self,x,y,graph):
+    def __init__(self,graph):
         self.graph = graph
         self.img = pygame.image.load('assets/enemy.png').convert()
         self.img.set_colorkey((255,255,255))
@@ -10,13 +10,13 @@ class Enemy:
         self.x = graph.nodes[10].x
         self.y = graph.nodes[10].y
         self.rect = pygame.Rect(self.x,self.y-13,5,13)
-        self.time = 0
+        self.time = 4
         self.air_timer = 0
         self.vertical_momentum = 0
         self.ai = Ai(graph)
         self.counter = 1
         self.path = None
-        self.frame = 0
+        self.frame = 1
         self.moving = False
         self.nextNode = None
         self.movingRight = False
@@ -32,15 +32,17 @@ class Enemy:
                 self.counter += 1
             if self.counter < len(self.path):
                 self.nextNode = self.path[self.counter]
-                if self.currentNode.getG(self.nextNode) is not 0 and self.nextNode.y < self.currentNode.y:
-                    self.jump()
-                if self.nextNode.x > self.currentNode.x:
-                    self.movingLeft = False
-                    self.movingRight = True
-                elif self.nextNode.x < self.currentNode.x:
-                    self.movingRight = False
-                    self.movingLeft = True
+                if self.currentNode is not None:
+                    if self.currentNode.getG(self.nextNode) is not 0 and self.nextNode.y < self.currentNode.y:
+                        self.jump()
+                    if self.nextNode.x > self.currentNode.x:
+                        self.movingLeft = False
+                        self.movingRight = True
+                    elif self.nextNode.x < self.currentNode.x:
+                        self.movingRight = False
+                        self.movingLeft = True
             else:
+                self.time += 1
                 self.x = self.rect.x
                 self.y = self.rect.y
                 node = self.graph.getNodeCloseTo(self)
@@ -54,10 +56,11 @@ class Enemy:
         self.move(tiles)
         screen.blit(self.img, (self.rect.x - scroll[0],self.rect.y - scroll[1]))
         
-    def update(self,player,doAnotherPath):
-        if doAnotherPath:
+    def update(self,player):
+        if self.time >= 1 and self.graph.getNodeCloseTo(self) is not self.graph.getNodeCloseTo(player):
             self.path = self.ai.DrawPath(self.graph.getNodeCloseTo(self),player)
             self.counter = 1
+            self.time = 0
             self.frame = 0
             self.nextNode = None
     
