@@ -1,26 +1,25 @@
 import pygame
 from ai import Ai
-import random
 class Enemy:
     def __init__(self,graph):
         self.graph = graph
-        self.img = pygame.image.load('assets/enemy.png').convert()
-        self.img.set_colorkey((255,255,255))
+        self.rect = pygame.Rect(graph.nodes[10].x,graph.nodes[10].y-13,5,13)
+        self.ai = Ai(graph)
+        self.img = self.createImg()
         self.currentNode = graph.nodes[10]
-        self.x = graph.nodes[10].x
-        self.y = graph.nodes[10].y
-        self.rect = pygame.Rect(self.x,self.y-13,5,13)
         self.time = 4
         self.air_timer = 0
-        self.vertical_momentum = 0
-        self.ai = Ai(graph)
+        self.verticalAcceleration = 0
         self.counter = 1
-        self.path = None
         self.frame = 1
-        self.moving = False
+        self.path = None
         self.nextNode = None
         self.movingRight = False
         self.movingLeft = False
+    def createImg(self):
+        img = pygame.image.load('assets/enemy.png').convert()
+        img.set_colorkey((255,255,255))
+        return img
     def draw(self, screen,scroll,tiles):
         self.movingLeft = False
         self.movingRight = False
@@ -43,8 +42,6 @@ class Enemy:
                         self.movingLeft = True
             else:
                 self.time += 1
-                self.x = self.rect.x
-                self.y = self.rect.y
                 node = self.graph.getNodeCloseTo(self)
                 if node.x > self.rect.x:
                     self.movingLeft = False
@@ -55,7 +52,18 @@ class Enemy:
 
         self.move(tiles)
         screen.blit(self.img, (self.rect.x - scroll[0],self.rect.y - scroll[1]))
-        
+    @property
+    def x(self):
+        return self.rect.x
+    @x.setter
+    def x(self, value):
+        self.rect.x = value
+    @property
+    def y(self):
+        return self.rect.y
+    @y.setter
+    def y(self, value):
+        self.rect.y = value
     def update(self,player):
         if self.time >= 1 and self.graph.getNodeCloseTo(self) is not self.graph.getNodeCloseTo(player):
             self.path = self.ai.DrawPath(self.graph.getNodeCloseTo(self),player)
@@ -72,7 +80,7 @@ class Enemy:
         return hit_list
     def jump(self):
         if self.air_timer < 6:
-            self.vertical_momentum = -5
+            self.verticalAcceleration = -5
     def move(self,tiles):
         collision_types = {'top':False,'bottom':False,'right':False,'left':False}
         movement = [0,0]
@@ -80,10 +88,10 @@ class Enemy:
             movement[0] += 1
         if self.movingLeft:#moving left
             movement[0] -= 1
-        movement[1] += self.vertical_momentum
-        self.vertical_momentum += 0.2
-        if self.vertical_momentum > 3:
-            self.vertical_momentum = 3
+        movement[1] += self.verticalAcceleration
+        self.verticalAcceleration += 0.2
+        if self.verticalAcceleration > 3:
+            self.verticalAcceleration = 3
 
         self.rect.x += movement[0]
         hit_list = self.collision_test(self.rect,tiles)
@@ -108,7 +116,7 @@ class Enemy:
              
         if collision_types['bottom'] == True:
             self.air_timer = 0
-            self.vertical_momentum = 0
+            self.verticalAcceleration = 0
         else:
             self.air_timer += 1
         
