@@ -19,7 +19,7 @@ class Node:
             self.h = math.sqrt((self.x - end.x)**2 + (self.y - end.y)**2)
         if g is not None:
             self.g = g
-        self.f = self.g + self.h
+        self.f = self.g[0] + self.g[1] + self.h
     def __eq__(self, other):
         if other is None: 
             return False

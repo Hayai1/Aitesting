@@ -5,51 +5,68 @@ class Enemy(Character):
         self.graph = graph
         self.ai = Ai(graph)
         self.currentNode = graph.nodes[10]
-        self.time = 4
-        self.counter = 1
-        self.frame = 1
+        self.timeSinceLastSolve = 100
+        self.nodePointer = 0
+        self.frame = 0
+        self.frameToGetNextNode = 16
         self.path = None
+        self.solve = False
         self.nextNode = None
         super().__init__(x, y, width, height,imgPath,xVelocity)
     def draw(self, screen,scroll,tiles):
+        #move based on the path
         self.movingLeft = False
         self.movingRight = False
-        if self.path is not None:
-            self.frame += 1
-            if self.frame == 16:
-                self.frame = 0
-                self.currentNode = self.nextNode
-                self.counter += 1
-            if self.counter < len(self.path):
-                self.nextNode = self.path[self.counter]
-                if self.currentNode is not None:
-                    if self.currentNode.getG(self.nextNode) is not 0 and self.nextNode.y < self.currentNode.y:
-                        self.jump()
-                    if self.nextNode.x > self.currentNode.x:
-                        self.movingLeft = False
-                        self.movingRight = True
-                    elif self.nextNode.x < self.currentNode.x:
-                        self.movingRight = False
-                        self.movingLeft = True
-            else:
-                self.time += 1
-                node = self.graph.getNodeCloseTo(self)
-                if node.x > self.rect.x:
+        if self.path is not None:#if a path exists then move based on the path
+            if self.currentNode is not None:
+                g = self.currentNode.getG(self.nextNode)
+                gx = g[0]
+                gy = g[1]
+                if gy is not 0:
+                    self.jump()
+                if self.nextNode.x > self.currentNode.x:
                     self.movingLeft = False
                     self.movingRight = True
-                elif node.x < self.rect.x:
+                elif self.nextNode.x < self.currentNode.x:
+                    self.movingRight = False
+                    self.movingLeft = True
+                self.frame += 1
+                self.frameToGetNextNode = 16*gx
+            if self.frame == self.frameToGetNextNode:#if frame is equal to the frame to get to the next node then:
+                #reset the frame and get the next node to visit
+                self.frame = 0
+                if self.nodePointer < len(self.path) - 1:#if the ai hasn't reached the last node in the path then get the next node to move too
+                    self.nodePointer += 1
+                    self.currentNode = self.nextNode
+                    self.nextNode = self.path[self.nodePointer]
+                else:#else reset the path, the node pointer and the current node
+                    self.path = None
+                    self.nodePointer = 0
+                    self.currentNode = None
+                    self.nextNode = None
+                    self.nodePointer = 0
+        else:
+            self.timeSinceLastSolve += 1
+            '''get to the closest node to make sure the ai doesn't get stuck'''
+            self.currentNode = self.graph.getNodeCloseTo(self)
+            self.currentNode.color = (255,0,0)
+            if self.currentNode.x > self.rect.x:
+                    self.movingLeft = False
+                    self.movingRight = True
+            elif self.currentNode.x < self.rect.x:
                     self.movingRight = False
                     self.movingLeft = True
         self.move(tiles)
         screen.blit(self.img, (self.rect.x - scroll[0],self.rect.y - scroll[1]))
+        
     def update(self,player):
-        if self.time >= 1 and self.graph.getNodeCloseTo(self) is not self.graph.getNodeCloseTo(player):
+        if self.solve and self.graph.getNodeCloseTo(self) is not self.graph.getNodeCloseTo(player):
+            self.solve = False
             self.path = self.ai.DrawPath(self.graph.getNodeCloseTo(self),player)
-            self.counter = 1
-            self.time = 0
-            self.frame = 0
-            self.nextNode = None
-    
+            self.timeSinceLastSolve = 0
+            self.nodePointer = 1
+            self.nextNode = self.path[self.nodePointer]
+            
     def jump(self):
         if self.air_timer < 6:
             self.verticalAcceleration = -5

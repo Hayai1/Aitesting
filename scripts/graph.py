@@ -26,6 +26,12 @@ class Graph:
                     closestNode = node
         closestNode.color = (0,255,0)
         return closestNode
+
+    def getRelativeStateOfNode(self,currentX,currentY,x,y,mapdata):#get the state of a node relative to the current node
+        if len(mapdata)-1 < currentY+y or len(mapdata[currentY+y])-1 < currentX+x:
+            return None
+        else:
+            return mapdata[currentY+y][currentX+x]
     #returns a list of nodes created relative to the map passed in
     def getNodes(self,mapdata):
         nodes = []
@@ -44,37 +50,36 @@ class Graph:
             x = 0
             y +=1
             nodes.append(nodeRow)
-        #connections:
-        for rowIndex in range(0, len(nodes)-1):
-            row = nodes[rowIndex]
-            for nodeIndex in range(0, len(row)-1):
-                if row[nodeIndex] != None:
-                    node = row[nodeIndex]
-                    if nodeIndex != len(row)-1 and row[nodeIndex+1] is not None:
-                        node.add_connection(row[nodeIndex+1],0)
-                    if nodeIndex != 0 and row[nodeIndex-1] is not None:
-                        node.add_connection(row[nodeIndex-1],0)
-
-                    Yrange = 0#range of nodes to check above and below
-                    if rowIndex > 0 and rowIndex < 4:#if the node is in the first 4 rows
-                        Yrange = rowIndex#set the range to the row index
-                    else: 
-                        Yrange = 4#otherwise set it to 4
-                        for aboveBy in range(1, Yrange):#check the nodes above
-                            rowAbove = nodes[rowIndex-aboveBy]#get the row above
-                            if (nodeIndex < len(rowAbove)-1 and #if the node is not on the edge of the map
-                                rowAbove[nodeIndex + 1] is not None and #and the node above is not None
-                                rowAbove[nodeIndex] is None and #and the node to the right of the node above is None
-                                nodes[rowIndex-aboveBy-1][nodeIndex + 1] is None and #and the node above the node above is None
-                                nodes[rowIndex-aboveBy-2][nodeIndex + 1] is None):#and the node above the node above the node above is None
-                                node.add_connection(rowAbove[nodeIndex + 1],aboveBy)#add a connection to the node above with a g cost of how many nodes slots are above current node
-                                break#break out of the loop
-                            if (nodeIndex > 0 and rowAbove[nodeIndex - 1] is not None and#if the node is not on the edge of the map
-                                rowAbove[nodeIndex] is None and #and the node to the left of the node above is None
-                                nodes[rowIndex-aboveBy-1][nodeIndex - 1] is None and #and the node above the node above is None
-                                nodes[rowIndex-aboveBy-2][nodeIndex - 1] is None):#and the node above the node above the node above is None
-                                node.add_connection(rowAbove[nodeIndex - 1],aboveBy)
-                                break#break out of the loop
+        #connections
+        amountOfRowsOfNodes = len(nodes)#get the amount of rows in nodes
+        for rowIndex in range(0, amountOfRowsOfNodes):#loop through each row in nodes
+            row = nodes[rowIndex]#get the row
+            amountOfNodesInRow = len(row)#get the amount of nodes in the row
+            for nodeIndex in range(0, amountOfNodesInRow):#loop through each node in the row
+                node = row[nodeIndex]#get the node
+                if node is not None:
+                    '''<---make connections on the same y levels:--->'''
+                    if (nodeIndex is not amountOfNodesInRow-1 and self.getRelativeStateOfNode(nodeIndex,rowIndex,1,0,nodes) is not None):
+                        node.add_connection(row[nodeIndex+1],[1,0])
+                    if nodeIndex is not 0 and self.getRelativeStateOfNode(nodeIndex,rowIndex,-1,0,nodes) is not None:
+                        node.add_connection(row[nodeIndex-1],[1,0])
+                    '''<---make connections on different y levels:--->'''
+                    #check if there is a node above the current node by 1 and 2
+                    if (self.getRelativeStateOfNode(nodeIndex,rowIndex,0,-1,nodes) is None and#is there no node above by 1
+                        self.getRelativeStateOfNode(nodeIndex,rowIndex,0,-2,nodes) is None):#is there no node above by 2
+                        #if so look for possible connections to make
+                        ConnectionYRange = 7#the range of y values to check for nodes
+                        ConnectionXRange = 2#the range of x values to check for nodes
+                        for y in range(1,ConnectionYRange):#loop through the y range
+                            for x in range(-ConnectionXRange,ConnectionXRange+1):#loop through the x range
+                                if abs(x) ==0 or abs(x) == 1:continue
+                                possibleConnection = self.getRelativeStateOfNode(nodeIndex,rowIndex,x,y,nodes)#get the node at the current x and y
+                                if possibleConnection is not None:#if there is a possible connection
+                                    #check for nodes that could obstuct the connection:
+                                    if (x > 0 and self.getRelativeStateOfNode(nodeIndex,rowIndex,1,0,nodes) is None or x < 0 and self.getRelativeStateOfNode(nodeIndex,rowIndex,-1,0,nodes) is None):
+                                        #make a connection
+                                        node.add_connection(possibleConnection,[x,y])
+        
         nodelist = []
         for row in nodes:
             for node in row:
