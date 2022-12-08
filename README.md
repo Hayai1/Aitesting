@@ -8,4 +8,4 @@ to run app run main.py
 
 press arrow keys to move/jump
 
-press s to solve to the current player location
+ai will chase you
