@@ -1,4 +1,4 @@
-# Aitesting
+# Enemy Pathfinding using the A* algorithm in pygame.
 
 Small project to test out how I could go about implimenting the A* algorithm into python for a game made in pygame.
 
