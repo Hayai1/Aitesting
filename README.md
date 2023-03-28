@@ -1,11 +1,13 @@
 # Aitesting
 
-to use this file you must install pygame:
+Small project to test out how I could go about implimenting the A* algorithm into python for a game made in pygame.
 
-pip install pygame
+To use this file you must install pygame:
 
-to run app run main.py
+<code>pip install pygame</code>
 
-press arrow keys to move/jump
+to execute the app run main.py
 
-ai will chase you
+Press arrow keys to move/jump
+
+the ai will chase you
